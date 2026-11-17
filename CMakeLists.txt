@@ -796,6 +796,20 @@ if(SENTRY_BACKEND_CRASHPAD)
 	endif()
 	add_subdirectory(external/crashpad crashpad_build)
 
+	if(SENTRY_ERROR_ON_WARNINGS)
+		if(MSVC)
+			target_compile_options(crashpad_interface BEFORE INTERFACE
+				$<$<COMPILE_LANGUAGE:C,CXX>:/W4>
+				$<$<COMPILE_LANGUAGE:C,CXX>:/WX>
+			)
+		else()
+			target_compile_options(crashpad_interface BEFORE INTERFACE
+				$<$<COMPILE_LANGUAGE:C,CXX>:-Wall>
+				$<$<COMPILE_LANGUAGE:C,CXX>:-Werror>
+			)
+		endif()
+	endif()
+
 	if(WIN32)
 		add_dependencies(sentry crashpad::wer)
 	endif()

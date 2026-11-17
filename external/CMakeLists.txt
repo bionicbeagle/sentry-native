@@ -197,3 +197,11 @@ target_include_directories(breakpad_client
 	PUBLIC
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
 )
+
+if(SENTRY_ERROR_ON_WARNINGS)
+	if(MSVC)
+		target_compile_options(breakpad_client PRIVATE /W4 /WX)
+	else()
+		target_compile_options(breakpad_client PRIVATE -Wall -Werror)
+	endif()
+endif()
